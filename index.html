@@ -72,15 +72,16 @@ header .meta{flex-basis:100%;color:var(--muted);font-size:13px;margin:0}
 <header>
   <h1>福建海防圖局部 澎湖部分</h1>
   <span class="en">Part of Fu Jian Hai Fang Tu (The Penghus and nearby area), No. 75</span>
-  <p class="meta">600 dpi 掃描，原幅 5480 × 3031 px。放大鏡讀取的是去網點後的全解析度影像；閱讀版為紅色通道灰階，黑字對比最強。</p>
+  <p class="meta">600 dpi 掃描，原幅 5480 × 3031 px。放大鏡預設讀取 Real-ESRGAN（remacri）AI 強化後的 8000 px 灰階影像；閱讀版為去網點後的紅色通道灰階，彩色為去網點原色。</p>
 </header>
 
 <div class="toolbar">
   <div class="seg" role="group" aria-label="放大鏡影像來源">
-    <button id="srcGray" type="button" aria-pressed="true">閱讀版（灰階）</button>
+    <button id="srcAI" type="button" aria-pressed="true">AI 強化（灰階）</button>
+    <button id="srcGray" type="button" aria-pressed="false">閱讀版（灰階）</button>
     <button id="srcColor" type="button" aria-pressed="false">彩色</button>
   </div>
-  <label for="zoom">倍率 <input id="zoom" type="range" min="1.5" max="6" step="0.25" value="3"> <span id="zoomVal">3.0×</span></label>
+  <label for="zoom">倍率 <input id="zoom" type="range" min="1.5" max="7" step="0.25" value="3"> <span id="zoomVal">3.0×</span></label>
   <label for="size">鏡徑 <input id="size" type="range" min="160" max="480" step="20" value="280"></label>
   <span class="hint">移動游標或手指即可放大；點一下固定鏡頭，再點一下解除。</span>
 </div>
@@ -175,13 +176,13 @@ header .meta{flex-basis:100%;color:var(--muted);font-size:13px;margin:0}
 (function(){
   var stage=document.getElementById('stage'),base=document.getElementById('base'),lens=document.getElementById('lens'),badge=document.getElementById('badge');
   var zoomEl=document.getElementById('zoom'),zoomVal=document.getElementById('zoomVal'),sizeEl=document.getElementById('size');
-  var bGray=document.getElementById('srcGray'),bColor=document.getElementById('srcColor');
-  var SRC={gray:'hires_gray.jpg',color:'hires_color.jpg'};
+  var bAI=document.getElementById('srcAI'),bGray=document.getElementById('srcGray'),bColor=document.getElementById('srcColor');
+  var SRC={ai:'hires_ai.jpg',gray:'hires_gray.jpg',color:'hires_color.jpg'};
   var cur='gray',zoom=3,size=280,locked=false,last=null,loaded={};
   function preload(k){ if(loaded[k])return; var im=new Image(); im.onload=function(){loaded[k]=true}; im.src=SRC[k]; }
-  preload('gray'); setTimeout(function(){preload('color')},1500);
-  function setSrc(k){ cur=k; lens.style.backgroundImage='url('+SRC[k]+')'; bGray.setAttribute('aria-pressed',k==='gray'); bColor.setAttribute('aria-pressed',k==='color'); if(last)draw(last.x,last.y); }
-  bGray.onclick=function(){setSrc('gray')}; bColor.onclick=function(){setSrc('color')};
+  preload('ai'); setTimeout(function(){preload('gray');preload('color')},2000);
+  function setSrc(k){ cur=k; lens.style.backgroundImage='url('+SRC[k]+')'; bAI.setAttribute('aria-pressed',k==='ai'); bGray.setAttribute('aria-pressed',k==='gray'); bColor.setAttribute('aria-pressed',k==='color'); if(last)draw(last.x,last.y); }
+  bAI.onclick=function(){setSrc('ai')}; bGray.onclick=function(){setSrc('gray')}; bColor.onclick=function(){setSrc('color')};
   zoomEl.oninput=function(){zoom=+this.value; zoomVal.textContent=zoom.toFixed(1)+'×'; if(last)draw(last.x,last.y);};
   sizeEl.oninput=function(){size=+this.value; lens.style.width=lens.style.height=size+'px'; if(last)draw(last.x,last.y);};
   function draw(x,y){ // x,y in stage pixels
@@ -199,7 +200,7 @@ header .meta{flex-basis:100%;color:var(--muted);font-size:13px;margin:0}
   stage.addEventListener('pointermove',function(e){ if(locked)return; var p=pos(e); draw(p.x,p.y); });
   stage.addEventListener('pointerdown',function(e){ var p=pos(e); if(locked){locked=false;lens.classList.remove('locked');draw(p.x,p.y);} else {draw(p.x,p.y);locked=true;lens.classList.add('locked');} e.preventDefault(); });
   stage.addEventListener('pointerleave',function(){ if(!locked)lens.classList.remove('on'); });
-  setSrc('gray');
+  setSrc('ai');
   document.querySelectorAll('.jump').forEach(function(b){
     b.addEventListener('click',function(){
       var fx=+b.dataset.x,fy=+b.dataset.y,w=base.clientWidth,h=base.clientHeight;
