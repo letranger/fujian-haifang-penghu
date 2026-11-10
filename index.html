@@ -1,0 +1,212 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>福建海防圖 澎湖部分</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500&display=swap">
+<style>
+/* Layout: one wide image stage with a floating lens, then a reading column of the map's text. */
+:root{
+  --bg:#f3f1ec;          /* paper-grey, slightly warm */
+  --fg:#1d1a17;          /* ink */
+  --muted:#6b645c;
+  --panel:#ffffff;
+  --line:#d9d3c9;
+  --accent:#b4342a;      /* cinnabar of the map's pigment */
+  --accent-soft:#f1dcd6;
+  --lens-ring:rgba(180,52,42,.85);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC",-apple-system,"PingFang TC","Helvetica Neue",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15130f;--fg:#ebe6dd;--muted:#a39b8f;--panel:#201d18;--line:#3a352d;
+    --accent:#e0695c;--accent-soft:#3b221e;--lens-ring:rgba(224,105,92,.9);color-scheme:dark
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15130f;--fg:#ebe6dd;--muted:#a39b8f;--panel:#201d18;--line:#3a352d;
+  --accent:#e0695c;--accent-soft:#3b221e;--lens-ring:rgba(224,105,92,.9);color-scheme:dark
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+header{max-width:1200px;margin:0 auto;padding-block:28px 12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+header h1{font-family:var(--serif);font-weight:700;font-size:clamp(22px,3.2vw,34px);margin:0;letter-spacing:.02em;text-wrap:balance}
+header .en{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:15px}
+header .meta{flex-basis:100%;color:var(--muted);font-size:13px;margin:0}
+.toolbar{max-width:1200px;margin:0 auto 10px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13px}
+.toolbar label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.toolbar input[type=range]{accent-color:var(--accent);width:120px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;color:var(--fg);padding:5px 14px;font:inherit;font-size:13px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+.seg button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{color:var(--muted)}
+.stage{max-width:1200px;margin:0 auto;position:relative;user-select:none;-webkit-user-select:none;touch-action:none;
+  border:1px solid var(--line);background:var(--panel);border-radius:6px;overflow:hidden}
+.stage img{display:block;width:100%;height:auto;cursor:crosshair}
+.lens{position:absolute;width:280px;height:280px;border-radius:50%;pointer-events:none;display:none;
+  border:3px solid var(--lens-ring);box-shadow:0 8px 28px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.6);
+  background-repeat:no-repeat;background-color:#000}
+.lens.on{display:block}
+.lens .cross{position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);opacity:.55}
+.lens .cross::before,.lens .cross::after{content:"";position:absolute;background:var(--accent)}
+.lens .cross::before{left:6px;top:0;width:2px;height:14px}.lens .cross::after{top:6px;left:0;height:2px;width:14px}
+.lens.locked{border-style:dashed}
+.badge{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 9px;border-radius:999px;font-variant-numeric:tabular-nums}
+.reading{max-width:760px;margin:40px auto 0}
+.reading h2{font-family:var(--serif);font-size:22px;margin:40px 0 6px;letter-spacing:.04em;text-wrap:balance;border-bottom:2px solid var(--accent);padding-bottom:6px}
+.reading h3{font-family:var(--serif);font-size:17px;margin:26px 0 4px;color:var(--accent)}
+.reading h3 small{font-family:var(--sans);font-weight:400;color:var(--muted);font-size:12px;margin-left:8px}
+.reading p{font-family:var(--serif);font-size:17px;line-height:1.95;margin:6px 0;text-align:justify}
+.reading p.note{font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.7;text-align:left}
+.reading .legend{font-size:13.5px;color:var(--muted);background:var(--accent-soft);border-radius:6px;padding:10px 14px;margin:14px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.tags li{font-family:var(--serif);font-size:15px;border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:2px 9px}
+.tags li.q{border-style:dashed;color:var(--muted)}
+.tags li button{all:unset;cursor:pointer}
+.tags li button:focus-visible{outline:2px solid var(--accent);border-radius:3px}
+.caption{color:var(--muted);font-size:12.5px;margin-top:6px}
+@media (max-width:640px){.lens{width:200px;height:200px}.reading p{font-size:16px}}
+@media (prefers-reduced-motion:no-preference){.lens{transition:width .15s,height .15s}}
+</style>
+
+<header>
+  <h1>福建海防圖局部 澎湖部分</h1>
+  <span class="en">Part of Fu Jian Hai Fang Tu (The Penghus and nearby area), No. 75</span>
+  <p class="meta">600 dpi 掃描，原幅 5480 × 3031 px。放大鏡讀取的是去網點後的全解析度影像；閱讀版為紅色通道灰階，黑字對比最強。</p>
+</header>
+
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="放大鏡影像來源">
+    <button id="srcGray" type="button" aria-pressed="true">閱讀版（灰階）</button>
+    <button id="srcColor" type="button" aria-pressed="false">彩色</button>
+  </div>
+  <label for="zoom">倍率 <input id="zoom" type="range" min="1.5" max="6" step="0.25" value="3"> <span id="zoomVal">3.0×</span></label>
+  <label for="size">鏡徑 <input id="size" type="range" min="160" max="480" step="20" value="280"></label>
+  <span class="hint">移動游標或手指即可放大；點一下固定鏡頭，再點一下解除。</span>
+</div>
+
+<div class="stage" id="stage">
+  <img id="base" src="display.jpg" alt="福建海防圖澎湖部分，紅底水墨，標有島嶼與沿海衛所" width="2400" height="1328">
+  <div class="lens" id="lens"><div class="cross"></div></div>
+  <div class="badge" id="badge">x — , y —</div>
+</div>
+
+<section class="reading">
+  <h2>圖中文字</h2>
+  <p class="note">以下依圖上位置整理，由右至左、由上而下直書原文改為橫排並加標點。無法確認的字以「（？）」標示，模糊不可辨者以「□」代替。各段標題旁的座標可點擊，鏡頭會跳到該處。</p>
+
+  <h3><button class="jump" data-x="0.235" data-y="0.37">澎湖按語</button><small>左側大框，十一行</small></h3>
+  <p>按澎湖環山而列者三十六島，嶼巨浸中一形勝也。山週圍四百餘里，其中可容千艘。我守之以制倭，倭之以擾我，此必爭之地，前後建議籌之詳矣。近因官兵遠涉，藉口風時不順，躲泊別處，或謂議當建城，又應大費，遂寢其議也。然要在將令得人，則兵不患其偷安，城之有無可毋論矣。惟是延袤曠野，向未議守者而棄之歟？既設遊屯兵防禦，可惜山地廣闊，若能開墾，則田有糧（？），厚利有實。倘有賢能把守，募沿海漢民為兵，汛畫地分疆，置基照作，倡人開墾，三年之外計畝量收其三分之一。行有成效，則置兵糧、上田相資貿而食，共守險地，兩者俱得之矣。</p>
+
+  <h3><button class="jump" data-x="0.35" data-y="0.445">澎湖遊右哨信地</button><small>中央框</small></h3>
+  <p>此係澎湖遊右哨信地。把風當輪（？），內南風移泊風櫃仔；在南（？）北風守鄉□頭，南風移泊大菓葉防守。</p>
+
+  <h3><button class="jump" data-x="0.265" data-y="0.585">浯嶼寨後哨信地</button><small>按語框下方</small></h3>
+  <p>此澳可泊南北風船百餘隻。北至福全一潮水，南至烈嶼、廈門一潮（？），至澎湖七更水，係浯嶼寨後哨信地。</p>
+
+  <h3><button class="jump" data-x="0.64" data-y="0.35">浯銅遊信地</button><small>右上框，九行</small></h3>
+  <p>浯銅遊屯駐（？）浯嶼信地。北距中左所，南距鎮海衛，各半潮水。漳郡之門戶，海澄之咽喉。寨多番舶，奇珍異物，賊之所覬（？）。要地北自擔嶼，南抵崎尾，而沿海居民屠島尾（？）、古浪嶼、中左所等處，俱盜賊淵藪，出沒靡常，其賊番之船每每在此開駕出港。設（？）使若嚴巡察、艦誌，則十得其九矣。</p>
+
+  <h3><button class="jump" data-x="0.82" data-y="0.47">銅山寨前哨信地</button><small>右側框</small></h3>
+  <p>此灣可泊北風船二十艘，但不宜南風。北至舊浯嶼一潮半潮水，南至將軍澳一潮水，係銅山寨前哨信地。</p>
+
+  <h3>停泊註記與里程</h3>
+  <p><button class="jump" data-x="0.435" data-y="0.31">［新門港旁］</button>此澳可容戰船十隻，軍船拋此。</p>
+  <p><button class="jump" data-x="0.815" data-y="0.805">［漳州府側］</button>至漳州府一百里，至井尾二十里，至井葉驛一百六十里，至漳浦縣一百里。</p>
+  <p><button class="jump" data-x="0.88" data-y="0.965">［右下框］</button>北至泉州府二百六十里，至同安縣一百三十里；南至漳浦縣一百二十里，至井葉驛五十里，至鎮海衛二百里，至陸鰲所一百里。</p>
+  <p><button class="jump" data-x="0.09" data-y="0.93">［左下框］</button>北至同安縣六十里，南至□□□四十里。<span class="caption">（此框位於書頁裝訂邊，印刷即已模糊）</span></p>
+
+  <h3>地名標籤</h3>
+  <p class="note">虛線框者為辨識存疑。點擊即可將鏡頭移到大致位置。</p>
+  <h3 style="font-size:15px;margin-top:14px">澎湖諸島（圖左半）</h3>
+  <ul class="tags">
+    <li><button class="jump" data-x="0.315" data-y="0.31">大門嶼</button></li><li><button class="jump" data-x="0.405" data-y="0.285">東吉洋</button></li>
+    <li><button class="jump" data-x="0.53" data-y="0.3">西吉洋</button></li><li><button class="jump" data-x="0.465" data-y="0.33">大菓葉</button></li>
+    <li><button class="jump" data-x="0.345" data-y="0.37">小菓葉</button></li><li><button class="jump" data-x="0.415" data-y="0.395">內塹</button></li>
+    <li><button class="jump" data-x="0.3" data-y="0.395">外塹</button></li><li class="q"><button class="jump" data-x="0.585" data-y="0.385">鄉嶼頭（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.425" data-y="0.47">內案山（？）</button></li><li><button class="jump" data-x="0.5" data-y="0.255">將軍嶼</button></li>
+    <li class="q"><button class="jump" data-x="0.535" data-y="0.255">馬之嶼（？）</button></li><li><button class="jump" data-x="0.455" data-y="0.28">林投仔</button></li>
+    <li class="q"><button class="jump" data-x="0.525" data-y="0.31">小吉港（？）</button></li><li><button class="jump" data-x="0.465" data-y="0.37">豬母落水</button></li>
+    <li class="q"><button class="jump" data-x="0.52" data-y="0.42">月眉仔（？）</button></li><li class="q"><button class="jump" data-x="0.545" data-y="0.395">鶴肉（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.525" data-y="0.485">晴灣（？）</button></li><li><button class="jump" data-x="0.525" data-y="0.565">花嶼</button></li>
+    <li><button class="jump" data-x="0.445" data-y="0.545">貓嶼</button></li><li class="q"><button class="jump" data-x="0.49" data-y="0.6">馬鞍嶼（？）</button></li>
+    <li><button class="jump" data-x="0.59" data-y="0.49">八罩嶼</button></li><li class="q"><button class="jump" data-x="0.63" data-y="0.49">花兒潭（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.565" data-y="0.535">虎井澳（？）</button></li><li><button class="jump" data-x="0.44" data-y="0.325">新門港</button></li>
+    <li><button class="jump" data-x="0.58" data-y="0.295">鵰鼻嶼（？）</button></li><li class="q"><button class="jump" data-x="0.605" data-y="0.265">大明嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.19" data-y="0.225">小漢水（？）</button></li><li class="q"><button class="jump" data-x="0.6" data-y="0.21">女丁港（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.47" data-y="0.74">井上嶼（？）</button></li><li class="q"><button class="jump" data-x="0.44" data-y="0.78">東海嶼（？）</button></li>
+  </ul>
+  <h3 style="font-size:15px;margin-top:14px">廈門、金門一帶（圖中右）</h3>
+  <ul class="tags">
+    <li><button class="jump" data-x="0.585" data-y="0.645">大擔嶼</button></li><li><button class="jump" data-x="0.675" data-y="0.635">小擔嶼</button></li>
+    <li class="q"><button class="jump" data-x="0.73" data-y="0.78">白浪嶼（？）</button></li><li class="q"><button class="jump" data-x="0.395" data-y="0.78">龍尾嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.455" data-y="0.835">曹寮港（？）</button></li><li class="q"><button class="jump" data-x="0.495" data-y="0.83">虎門嶼（？）</button></li>
+    <li><button class="jump" data-x="0.34" data-y="0.89">中左所</button></li><li><button class="jump" data-x="0.17" data-y="0.605">金門所</button></li>
+    <li class="q"><button class="jump" data-x="0.17" data-y="0.69">歡山嶼（？）</button></li><li class="q"><button class="jump" data-x="0.13" data-y="0.53">大嶝嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.06" data-y="0.485">料羅（？）</button></li><li class="q"><button class="jump" data-x="0.14" data-y="0.76">下崎嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.115" data-y="0.84">滿洲（？）</button></li><li class="q"><button class="jump" data-x="0.085" data-y="0.51">官澳巡司（？）</button></li>
+  </ul>
+  <h3 style="font-size:15px;margin-top:14px">浯嶼、漳州沿海（圖右半）</h3>
+  <ul class="tags">
+    <li><button class="jump" data-x="0.635" data-y="0.605">浯嶼寨</button></li><li><button class="jump" data-x="0.815" data-y="0.605">浯銅遊後哨信地</button></li>
+    <li><button class="jump" data-x="0.735" data-y="0.46">浯銅二山分界</button></li><li class="q"><button class="jump" data-x="0.69" data-y="0.5">東閣（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.695" data-y="0.54">波尾嶼（？）</button></li><li class="q"><button class="jump" data-x="0.77" data-y="0.52">鹽埕嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.735" data-y="0.615">小滿嶼（？）</button></li><li class="q"><button class="jump" data-x="0.775" data-y="0.645">流會嶼（？）</button></li>
+    <li><button class="jump" data-x="0.845" data-y="0.635">鎮海衛</button></li><li><button class="jump" data-x="0.7" data-y="0.72">大武山</button></li>
+    <li class="q"><button class="jump" data-x="0.645" data-y="0.67">高崎嶼（？）</button></li><li class="q"><button class="jump" data-x="0.6" data-y="0.7">烏尾嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.9" data-y="0.325">南鎮（？）</button></li><li class="q"><button class="jump" data-x="0.875" data-y="0.6">白塘嶼（？）</button></li>
+    <li><button class="jump" data-x="0.935" data-y="0.64">井尾巡司</button></li><li><button class="jump" data-x="0.775" data-y="0.74">江口嶼</button></li>
+    <li><button class="jump" data-x="0.665" data-y="0.84">海澄縣</button></li><li><button class="jump" data-x="0.72" data-y="0.78">方田</button></li>
+    <li><button class="jump" data-x="0.6" data-y="0.93">月港</button></li><li><button class="jump" data-x="0.725" data-y="0.93">漳州府</button></li>
+    <li class="q"><button class="jump" data-x="0.695" data-y="0.925">漳州衛（？）</button></li><li><button class="jump" data-x="0.78" data-y="0.9">漳南道</button></li>
+    <li><button class="jump" data-x="0.795" data-y="0.945">龍溪縣</button></li><li class="q"><button class="jump" data-x="0.6" data-y="0.785">漳南所（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.665" data-y="0.765">高浦所（？）</button></li><li class="q"><button class="jump" data-x="0.565" data-y="0.77">馬鑾嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.72" data-y="0.835">劉山嶼（？）</button></li><li class="q"><button class="jump" data-x="0.66" data-y="0.725">五通嶼（？）</button></li>
+    <li class="q"><button class="jump" data-x="0.745" data-y="0.7">東澳嶼（？）</button></li><li class="q"><button class="jump" data-x="0.77" data-y="0.74">徑上嶼（？）</button></li>
+  </ul>
+
+  <h3>書頁印刷題名</h3>
+  <p>75. 福建海防圖局部　澎湖部分</p>
+  <p style="font-style:italic">Part of Fu Jian Hai Fang Tu (The Penghus and nearby area)</p>
+  <p class="legend">判讀說明：這是書頁翻印件，原件以朱砂底、墨書標示。長文經放大後可全文辨讀；零星小標籤受印刷網點與摺痕影響，少數字形只能依澎湖、廈門一帶既有地名推定，均加「（？）」。</p>
+</section>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage'),base=document.getElementById('base'),lens=document.getElementById('lens'),badge=document.getElementById('badge');
+  var zoomEl=document.getElementById('zoom'),zoomVal=document.getElementById('zoomVal'),sizeEl=document.getElementById('size');
+  var bGray=document.getElementById('srcGray'),bColor=document.getElementById('srcColor');
+  var SRC={gray:'hires_gray.jpg',color:'hires_color.jpg'};
+  var cur='gray',zoom=3,size=280,locked=false,last=null,loaded={};
+  function preload(k){ if(loaded[k])return; var im=new Image(); im.onload=function(){loaded[k]=true}; im.src=SRC[k]; }
+  preload('gray'); setTimeout(function(){preload('color')},1500);
+  function setSrc(k){ cur=k; lens.style.backgroundImage='url('+SRC[k]+')'; bGray.setAttribute('aria-pressed',k==='gray'); bColor.setAttribute('aria-pressed',k==='color'); if(last)draw(last.x,last.y); }
+  bGray.onclick=function(){setSrc('gray')}; bColor.onclick=function(){setSrc('color')};
+  zoomEl.oninput=function(){zoom=+this.value; zoomVal.textContent=zoom.toFixed(1)+'×'; if(last)draw(last.x,last.y);};
+  sizeEl.oninput=function(){size=+this.value; lens.style.width=lens.style.height=size+'px'; if(last)draw(last.x,last.y);};
+  function draw(x,y){ // x,y in stage pixels
+    var w=base.clientWidth,h=base.clientHeight;
+    x=Math.max(0,Math.min(w,x)); y=Math.max(0,Math.min(h,y));
+    var r=size/2;
+    lens.style.left=(x-r)+'px'; lens.style.top=(y-r)+'px';
+    lens.style.backgroundSize=(w*zoom)+'px '+(h*zoom)+'px';
+    lens.style.backgroundPosition=(-(x*zoom-r))+'px '+(-(y*zoom-r))+'px';
+    lens.classList.add('on');
+    badge.textContent='x '+Math.round(x/w*5480)+' , y '+Math.round(y/h*3031)+' px（原圖）';
+    last={x:x,y:y};
+  }
+  function pos(e){var rc=stage.getBoundingClientRect();return {x:e.clientX-rc.left,y:e.clientY-rc.top};}
+  stage.addEventListener('pointermove',function(e){ if(locked)return; var p=pos(e); draw(p.x,p.y); });
+  stage.addEventListener('pointerdown',function(e){ var p=pos(e); if(locked){locked=false;lens.classList.remove('locked');draw(p.x,p.y);} else {draw(p.x,p.y);locked=true;lens.classList.add('locked');} e.preventDefault(); });
+  stage.addEventListener('pointerleave',function(){ if(!locked)lens.classList.remove('on'); });
+  setSrc('gray');
+  document.querySelectorAll('.jump').forEach(function(b){
+    b.addEventListener('click',function(){
+      var fx=+b.dataset.x,fy=+b.dataset.y,w=base.clientWidth,h=base.clientHeight;
+      locked=true; lens.classList.add('locked'); draw(fx*w,fy*h);
+      stage.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+  });
+  window.addEventListener('resize',function(){ if(last)draw(last.x,last.y); });
+})();
+</script>
